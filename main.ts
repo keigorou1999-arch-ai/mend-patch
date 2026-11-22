@@ -218,7 +218,8 @@ function unifiedSections(lines: string[]): USection[] {
       i += 1;
     } else if (l.startsWith('--- ')) {
       if (pairAt(i)) {
-        const s: USection = cur !== null && header ? cur : open();
+        // The pair belongs to the header of a `diff --git` section that has none yet; any other pair starts a section.
+        const s: USection = cur !== null && header && cur.pair === null ? cur : open();
         s.pair = [pairPath(l), pairPath(lines[i + 1]!)];
         i += 2;
       } else {
